@@ -18,15 +18,13 @@ queue = []
 @bot.event
 async def on_voice_state_update(member, before, after):
 
-  if member == bot.user:  # ボット自身の変更は無視
+  if member == bot.user: 
     return
 
   if before.channel and not after.channel:
-    # メンバーがボイスチャットから退出した場合
     voice_channel = before.channel
     members_in_channel = len(voice_channel.members)
 
-    # 自分以外のメンバーがいない場合
     if members_in_channel == 1:
       voice_client = member.guild.voice_client
       if voice_client.is_connected():
@@ -42,7 +40,7 @@ async def on_ready():
 async def play(ctx, url):
   voice_channel = ctx.author.voice.channel if ctx.author.voice else None
   if not voice_channel:
-    await ctx.send("ボイスチャンネルに参加してください。")
+    await ctx.send("Join the Voice Channel.")
     return
 
   # キューに曲を追加
@@ -64,7 +62,7 @@ async def play_next(ctx):
     url = queue.pop(0)
     voice_channel = ctx.author.voice.channel if ctx.author.voice else None
     if not voice_channel:
-      await ctx.send("ボイスチャンネルに参加してください。")
+      await ctx.send("Join the Voice Channel.")
       return
 
     voice_client = await voice_channel.connect()
@@ -86,7 +84,7 @@ async def play_next(ctx):
 
       # Discordに音声を流す
       voice_client.play(discord.FFmpegOpusAudio(audio_url))
-      await ctx.send(f"再生中: {info['title']}")
+      await ctx.send(f"Playing: {info['title']}")
 
       # 曲が終了したら次の曲を再生
       while voice_client.is_playing():
@@ -96,9 +94,9 @@ async def play_next(ctx):
       await play_next(ctx)
     except Exception as e:
       print(e)
-      await ctx.send("音声を再生できませんでした.")
+      await ctx.send("Video could not be played.")
   else:
-    await ctx.send("キューに再生する曲がありません。")
+    await ctx.send("There are no songs to play in the queue.")
 
 
 @bot.command()
@@ -106,21 +104,21 @@ async def skip(ctx):
   voice_client = ctx.voice_client
   if voice_client and voice_client.is_playing():
     voice_client.stop()
-    await ctx.send("現在の曲をスキップしました。")
+    await ctx.send("Skipped current song.")
   else:
     await ctx
 
 
 @bot.command()
 async def h(ctx):
-  embed = discord.Embed(title="コマンド一覧",
-                        description="このボットのコマンド一覧です。",
+  embed = discord.Embed(title="Command List",
+                        description="Here is a list of commands for this bot.",
                         color=discord.Color.blue())
   embed.add_field(name="y!play [URL]",
-                  value="指定したYouTubeのURLから音楽を再生します。",
+                  value="Play music from the specified YouTube URL.",
                   inline=False)
-  embed.add_field(name="y!leave", value="ボイスチャンネルから退出します。", inline=False)
-  embed.add_field(name="y!skip", value="YouTubeをスキップ", inline=False)
+  embed.add_field(name="y!leave", value="Exit from the voice channel.", inline=False)
+  embed.add_field(name="y!skip", value="Skip to video.", inline=False)
   await ctx.send(embed=embed)
 
 
