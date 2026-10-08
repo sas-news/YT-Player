@@ -1,5 +1,6 @@
-from flask import Flask
 from threading import Thread
+
+from flask import Flask
 
 app = Flask('')
 
@@ -14,5 +15,5 @@ def run():
 
 
 def keep_alive():
-  t = Thread(target=run)
+  t = Thread(target=run, daemon=True)
   t.start()
