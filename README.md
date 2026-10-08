@@ -9,6 +9,7 @@ This bot is for listening to YouTube audio on Discord's VC. Many Discord music p
 | y!play [URL] | Play music from the specified YouTube URL. |
 | y!leave      | Exit from the voice channel.               |
 | y!skip       | Skip to video.                             |
+| y!h          | Show the command list.                     |
 
 ## Execution Environment
 
